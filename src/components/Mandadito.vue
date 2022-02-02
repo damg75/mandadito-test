@@ -948,7 +948,7 @@ export default {
       ],
       fleet: 0,
     },
-    step: 1,
+    step: 0,
     payment: {
       paymentList: ["Wallet", "Zelle", "tdc", "pago móvil automatizado"],
       payment: "Wallet",
