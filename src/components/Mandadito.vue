@@ -2,13 +2,15 @@
   <v-container>
     <v-row dense>
       <v-col class="d-flex justify-space-between">
-        <v-icon class="go-back-main" color="black" @click="step --"
+        <v-icon class="go-back-main" color="black" @click="step--"
           >mdi-keyboard-backspace</v-icon
         >
         <span class="font-weight-bold">Ridery | Encomiendas</span>
         <span color="white">.</span>
       </v-col>
     </v-row>
+
+    <!-- step 0 -->
     <span v-if="step === 0">
       <v-row>
         <v-col>
@@ -650,7 +652,173 @@
       <!-- siguiente -->
       <v-row>
         <v-col>
-          <v-btn block color="black" dark @click="step ++"> Siguiente </v-btn>
+          <v-btn block color="black" dark @click="step++"> Siguiente </v-btn>
+        </v-col>
+      </v-row>
+    </span>
+
+    <!-- step 1 -->
+    <span v-if="step === 1">
+      <v-row>
+        <v-col>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-header
+                >Resumen de Envío</v-expansion-panel-header
+              >
+              <v-expansion-panel-content>
+                <v-card class="pa-4">
+                  <v-row dense>
+                    <v-col class="d-flex flex-row justify-space-between">
+                      <h2 class="font-weight-bold">
+                        Resumen del Envío
+                        <v-icon color="black">mdi-truck</v-icon>
+                      </h2>
+                      <v-icon color="black"> mdi-share-variant-outline </v-icon>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <h3>Coordenadas de Envío</h3>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <li>
+                        <span class="font-weight-bold">
+                          Origen: {{ origin.origin }}
+                        </span>
+                        <ul>
+                          <li>Detalles: {{ origin.details }}</li>
+                          <li>Persona a Entregar: {{ origin.radioGroup }}</li>
+                          <ul v-if="origin.radioGroup === 'Tercero'">
+                            <li>Nombre de Tercero: {{ origin.thirdPhone }}</li>
+                            <li>Número de Tercero: {{ origin.thirdName }}</li>
+                          </ul>
+                        </ul>
+                      </li>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <li>
+                        <span class="font-weight-bold">
+                          Destino: {{ destination.destination }}
+                        </span>
+                        <ul>
+                          <li>Detalles: {{ destination.details }}</li>
+                          <li>
+                            Persona a Entregar: {{ destination.radioGroup }}
+                          </li>
+                          <ul v-if="destination.radioGroup === 'Tercero'">
+                            <li>
+                              Nombre de Tercero: {{ destination.thirdPhone }}
+                            </li>
+                            <li>
+                              Número de Tercero: {{ destination.thirdName }}
+                            </li>
+                          </ul>
+                        </ul>
+                      </li>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <h3>Detalles de Paquete</h3>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <li>Volumen: {{ paquete.volume }}</li>
+                      <li>Masa: {{ paquete.mass }}</li>
+                      <li>Tipo: {{ paquete.type }}</li>
+                      <li>Detalles: {{ paquete.details }}</li>
+                      <li>
+                        Asegurado ?
+                        <ul>
+                          <li>
+                            {{ paquete.secure ? "Sí" : "No" }}
+                          </li>
+                          <li v-if="paquete.secure">
+                            Tipo: {{ paquete.secureType }}
+                          </li>
+                        </ul>
+                      </li>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <h3>Detalles de Pick Up Time</h3>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <ul>
+                      <li>
+                        {{ schedule.schedule ? "Agendado" : "Instantáneo" }}
+                      </li>
+                      <ul v-if="schedule.schedule">
+                        <li>Día y Hora{{ schedule.time }}</li>
+                      </ul>
+                    </ul>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <h3>Detalles de Flota</h3>
+                    </v-col>
+                  </v-row>
+                  <v-row dense>
+                    <v-col>
+                      <ul>
+                        <li>
+                          <v-icon color="black">{{ handleFleet.icon }}</v-icon>
+                          - {{ handleFleet.name }}
+                        </li>
+                      </ul>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card class="pa-4">
+            <v-row>
+              <v-col>
+                <h2 class="font-weight-bold">
+                  Pagar
+                  <v-icon color="black">mdi-cash-register</v-icon>
+                </h2>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <p>Envío Flota {{ handleFleet.name }}: $xx</p>
+                <p v-if="paquete.secure">
+                  Seguro: {{ paquete.secureType }} - $xx
+                </p>
+                <p>
+                  <v-text-field
+                    solo
+                    label="PromoCode"
+                    placeholder="Coloque PromoCode"
+                    append-icon="mdi-send"
+                    color="black"
+                  >
+                  </v-text-field>
+                </p>
+                <h3 class="cyan--text">Total envío: $XX</h3>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <label>Método de Pago</label>
+                <v-select solo :items="payment.paymentList" v-model="payment.payment"> </v-select>
+              </v-col>
+            </v-row>
+          </v-card>
         </v-col>
       </v-row>
     </span>
@@ -748,7 +916,11 @@ export default {
       ],
       fleet: 0,
     },
-    step: 0,
+    step: 1,
+    payment: {
+      paymentList: ['Wallet', 'Zelle', 'tdc', 'pago móvil automatizado'],
+      payment: 'Wallet'
+    }
   }),
   methods: {
     handleSaveOrigin() {
@@ -762,6 +934,46 @@ export default {
     handleSavePaquete() {
       this.paquete.dialog = false;
       this.snackbar.snackbar = true;
+    },
+  },
+  computed: {
+    handleFleet() {
+      let return_ = "";
+      switch (this.fleet.fleet) {
+        case 0:
+          return_ = {
+            name: "Bicicleta",
+            icon: "mdi-bicycle",
+          };
+          break;
+        case 1:
+          return_ = {
+            name: "Moto",
+            icon: "mdi-motorbike",
+          };
+          break;
+
+        case 2:
+          return_ = {
+            name: "Carro",
+            icon: "mdi-car",
+          };
+          break;
+
+        case 3:
+          return_ = {
+            name: "Camioneta",
+            icon: "mdi-car-estate",
+          };
+          break;
+        default:
+          return_ = {
+            name: "Bicicleta",
+            icon: "mdi-bicycle",
+          };
+          break;
+      }
+      return return_;
     },
   },
 };
