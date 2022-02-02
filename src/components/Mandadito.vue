@@ -393,7 +393,7 @@
                     <v-toolbar-title>Detalles de Paquete</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                      <v-btn dark text @click="paquete.dialog = false">
+                      <v-btn dark text @click="handleSavePaquete()">
                         Guardar
                       </v-btn>
                     </v-toolbar-items>
@@ -490,16 +490,77 @@
                     </v-row>
                     <v-row dense v-if="paquete.secure">
                       <v-col>
-                        <v-text-field
-                          v-model="destination.thirdName"
-                          label="Nombre de Tercero"
-                          prepend-icon="mdi-account"
+                        <v-select
+                          v-model="paquete.secureType"
+                          label="Tipo de Seguro"
+                          prepend-icon="mdi-lock"
+                          :items="paquete.secureTypeList"
                         />
                       </v-col>
                     </v-row>
                   </v-container>
                 </v-card>
               </v-dialog>
+            </v-col>
+          </v-row>
+          <span v-if="paquete.mass">
+            <br />
+            <br />
+          </span>
+          <v-row dense v-if="paquete.mass">
+            <v-col>
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-header
+                    >Detalles del Paquete</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <ul>
+                      <li>Volumen: {{ paquete.volumne }}</li>
+                      <li>Peso: {{ paquete.mass }}</li>
+                      <li>Tipo: {{ paquete.type }}</li>
+                      <li>Detalles: {{ paquete.details }}</li>
+                      <li>Asegurado?: {{ paquete.secure }}</li>
+                      <li v-if="paquete.secure">
+                        Tipo de Seguro: {{ paquete.secureType }}
+                      </li>
+                    </ul>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- Agendar -->
+    <v-row>
+      <v-col>
+        <v-card class="pa-4">
+          <v-row dense>
+            <v-col>
+              <h2 class="font-weight-bold">
+                Detalles de Hora de Pickup
+                <v-icon color="black">mdi-clock</v-icon>
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-radio-group v-model="schedule.schedule" class="d-flex flex-row">
+                <v-radio
+                  :value="false"
+                  label="Instantáneo (30 minuros o menos)"
+                ></v-radio>
+                <v-radio :value="true" label="Agendado"></v-radio>
+              </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-row dense v-if="schedule.schedule">
+            <v-col>
+              <v-datetime-picker label="Select Datetime" v-model="schedule.time">
+              </v-datetime-picker>
             </v-col>
           </v-row>
         </v-card>
@@ -570,7 +631,13 @@ export default {
       ],
       type: "",
       details: "",
-      secure: false
+      secure: false,
+      secureTypeList: ["básico $", "medio $$", "grande $$$"],
+      secureType: "",
+    },
+    schedule: {
+      schedule: false,
+      time: ""
     },
   }),
   methods: {
@@ -580,6 +647,10 @@ export default {
     },
     handleSaveDestination() {
       this.destination.dialog = false;
+      this.snackbar.snackbar = true;
+    },
+    handleSavePaquete() {
+      this.paquete.dialog = false;
       this.snackbar.snackbar = true;
     },
   },
