@@ -815,7 +815,39 @@
             <v-row>
               <v-col>
                 <label>Método de Pago</label>
-                <v-select solo :items="payment.paymentList" v-model="payment.payment"> </v-select>
+                <v-select
+                  solo
+                  :items="payment.paymentList"
+                  v-model="payment.payment"
+                >
+                </v-select>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card class="pa-4">
+            <v-row dense>
+              <v-col>
+                <v-checkbox v-model="checkbox.checkbox">
+                  <template v-slot:label>
+                    <div>
+                      Al aceptar el servicio usted acepta los
+                      <span class="text-decoration-underline"
+                        >Términos y Condiciones</span
+                      >
+                    </div>
+                  </template>
+                </v-checkbox>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn  :disabled="!checkbox.checkbox" block color="primary" @click="handleEncomienda()">
+                  Encomienda
+                </v-btn>
               </v-col>
             </v-row>
           </v-card>
@@ -918,9 +950,12 @@ export default {
     },
     step: 1,
     payment: {
-      paymentList: ['Wallet', 'Zelle', 'tdc', 'pago móvil automatizado'],
-      payment: 'Wallet'
-    }
+      paymentList: ["Wallet", "Zelle", "tdc", "pago móvil automatizado"],
+      payment: "Wallet",
+    },
+    checkbox: {
+      checkbox: false,
+    },
   }),
   methods: {
     handleSaveOrigin() {
@@ -935,6 +970,10 @@ export default {
       this.paquete.dialog = false;
       this.snackbar.snackbar = true;
     },
+    handleEncomienda() {
+      alert('Encomienda enviada a Pool')
+      this.step = 0
+    }
   },
   computed: {
     handleFleet() {
