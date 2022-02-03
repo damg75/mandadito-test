@@ -1045,6 +1045,7 @@ export default {
 </script>
 
 <style lang="sass">
-.super-container
-  max-width: 550px !important
+// .super-container
+//   max-width: 550px !important
+//   border: solid 5px black
 </style>
